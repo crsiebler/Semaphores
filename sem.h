@@ -1,0 +1,50 @@
+// Name: Cory Siebler & Marcus Finney
+// Class: CSE430 #12109
+// Assignment: Project 3
+// Description: Holds the functions to create and modify Semaphores. InitSem(semaphore, value) initializes
+//		a new Semaphore with the value equal to the parameter. P(semaphore) will decrement the value
+//		and block the process if the value is less than zero. V(semaphore) will increment the value
+//		and call the aprocess in the PCB and puts in the RunQ if the value is 0 or negative.
+
+#ifndef SEM_H
+#define SEM_H
+
+//---------------//
+// Include Files //
+//---------------//
+
+//----------------------------//
+// Data Structure Declaration //
+//----------------------------//
+typedef struct semaphore {
+	int value;
+	struct queue que;
+} semaphore;
+
+//----------------------------//
+// Method Forward Declaration //
+//----------------------------//
+void initSem(semaphore, int);
+void P(semaphore);
+void V(semaphore);
+
+//----------------//
+// initSem Method //
+//----------------//
+void initSem(semaphore sem, int value) {
+	return;
+}
+
+//----------//
+// P Method //
+//----------//
+void P(semaphore sem) {
+	return;
+}
+
+//----------//
+// V Method //
+//----------//
+void V(semaphore sem) {
+	return;
+}
