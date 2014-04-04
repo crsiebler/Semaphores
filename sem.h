@@ -46,7 +46,7 @@ void P(semaphore *sem) {
 	if(sem->value < 0){
 		t = delQueue(runQ);
 		addQueue(sem->sleepQ, t);
-		swapcontext(&(t->context), &(runQ->header->context);
+		swapcontext(&(t->context), &(runQ->header->context));
 	}
 	return;
 }
