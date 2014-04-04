@@ -66,8 +66,8 @@ void addQueue(struct queue *head, struct TCB_t *item) {
 	} else {
 		// Queue is empty
 		head->header = item; // Make header point to new item
-		item->prev = NULL; // Make pointer to itself
-		item->next = NULL; // Make pointer to itself
+		item->prev = NULL; // Make pointer to NULL
+		item->next = NULL; // Make pointer to NULL
 	}
 	
 	return;
