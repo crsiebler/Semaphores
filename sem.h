@@ -35,7 +35,9 @@ void V(semaphore*);
 void initSem(semaphore *sem, int value) {
 	sem->sleepQ = (struct queue*) malloc(sizeof(struct queue));
 	initQueue(sem->sleepQ);
+
 	sem->value = value;
+
 	return;
 }
 
@@ -44,6 +46,7 @@ void initSem(semaphore *sem, int value) {
 //----------//
 void P(semaphore *sem) {
 	struct TCB_t *t; 
+
 	sem->value--;
 
 	if (sem->value < 0) {
@@ -60,6 +63,7 @@ void P(semaphore *sem) {
 //----------//
 void V(semaphore *sem) {
 	struct TCB_t *t; 
+
 	sem->value++;
 
 	if (sem->value <= 0) {
@@ -68,6 +72,7 @@ void V(semaphore *sem) {
 	}
 
 	yield();
+
 	return;
 }
 
