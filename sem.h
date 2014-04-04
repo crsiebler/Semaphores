@@ -12,39 +12,55 @@
 //---------------//
 // Include Files //
 //---------------//
+#include "threads.h"
 
 //----------------------------//
 // Data Structure Declaration //
 //----------------------------//
 typedef struct semaphore {
 	int value;
-	struct queue que;
+	struct queue *sleepQ;
 } semaphore;
 
 //----------------------------//
 // Method Forward Declaration //
 //----------------------------//
-void initSem(semaphore, int);
-void P(semaphore);
-void V(semaphore);
+void initSem(semaphore*, int);
+void P(semaphore*);
+void V(semaphore*);
 
 //----------------//
 // initSem Method //
 //----------------//
-void initSem(semaphore sem, int value) {
+void initSem(semaphore *sem, int value) {
+	sem->value = value;
 	return;
 }
 
 //----------//
 // P Method //
 //----------//
-void P(semaphore sem) {
+void P(semaphore *sem) {
+	struct TCB_t *t; 
+	sem->value--;
+	if(sem->value < 0){
+		t = delQueue(runQ);
+		addQueue(sem->sleepQ, t);
+		swapcontext(&(t->context), &(runQ->header->context);
+	}
 	return;
 }
 
 //----------//
 // V Method //
 //----------//
-void V(semaphore sem) {
+void V(semaphore *sem) {
+	struct TCB_t *t; 
+	sem->value++;
+	if(sem->value <= 0){
+		t = delQueue(sem->sleepQ);
+		addQueue(runQ, t);
+	}
+	yield();
 	return;
 }

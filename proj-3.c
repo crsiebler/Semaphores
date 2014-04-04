@@ -6,10 +6,16 @@
 //---------------//
 // Include Files //
 //---------------//
+#include "sem.h"
 
 //--------------------//
 // Threaded Functions //
 //--------------------//
+void f1();
+void f2();
+void f3();
+
+void
 
 //-------------//
 // main Method //
