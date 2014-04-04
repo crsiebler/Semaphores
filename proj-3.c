@@ -178,6 +178,7 @@ void initShelf() {
 //-------------//
 // main Method //
 //-------------//
+
 /*
 This is Main for Method 1 Testing
 
@@ -195,6 +196,7 @@ int main() {
 	return 0;
 }
 */
+
 int main() {
 	empty = (struct semaphore*) malloc(sizeof(struct semaphore));
 	full = (struct semaphore*) malloc(sizeof(struct semaphore));
@@ -205,6 +207,8 @@ int main() {
 
 	initSem(empty, SHELF_SIZE);
 	initSem(full, 0);
+
+	initShelf();
 
 	startThread(consumer1);
 	startThread(consumer2);
