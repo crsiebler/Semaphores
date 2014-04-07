@@ -27,10 +27,10 @@ void yield();
 // start_thread Method //
 //---------------------//
 void startThread(void (*function)(void)) {
-	TCB_t *temp = newItem();
-	void *stack = (void *) malloc(8192);
-	init_TCB(temp, function, stack, 8192);
-	addQueue(runQ, temp);
+	TCB_t *temp = newItem();	// Create a new TCB to store process
+	void *stack = (void *) malloc(8192);	// Allocate the stack memory
+	init_TCB(temp, function, stack, 8192);	// Initialize the new TCB
+	addQueue(runQ, temp);	// Put the new TCB into the Run Queue
 
 	return;
 }
@@ -39,11 +39,20 @@ void startThread(void (*function)(void)) {
 // run Method //
 //------------//
 void run() {
-	ucontext_t from, to;
+	// Declare the context of the threaded TCBs
+	// ucontext_t from, to;
+	
+	// Declare the context of the first TCB
 	ucontext_t parent;
-	from = parent;
+	
+	// Assign pointers
+	// from = parent;
+	// to = (runQ->header->context);
+	
+	// Grab the original conext
 	getcontext(&parent);
-	to = (runQ->header->context);
+	
+	// Swap to the first TCB in Run Queue
 	swapcontext(&parent, &(runQ->header->context));
 
 	return;
@@ -53,11 +62,22 @@ void run() {
 // yield Method //
 //--------------//
 void yield() {
-	ucontext_t from, to;	
+	// Declare the context of the threaded TCBs
+	ucontext_t from, to;
+	
+	// Grab the running processes context
 	getcontext(&from);
+	
+	// Update the context of the current process
 	runQ->header->context = from;
+	
+	// Move the process to the end of the Queue
 	rotQueue(runQ);
+	
+	// Grab the next process in the Run Queue
 	to = runQ->header->context;
+	
+	// Swap the currently running process to the next process in the Queue
 	swapcontext(&from, &to);
 
 	return;
