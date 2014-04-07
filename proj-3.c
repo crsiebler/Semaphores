@@ -91,8 +91,8 @@ void producer1() {
 	while (1) {
 		P(empty);
 		// Critical Section
-		shelf[in] = 1;	
-		in = (in + 1) % SHELF_SIZE;
+		shelf[in] = 1;	// Produce Can	
+		in = (in + 1) % SHELF_SIZE;	// Move to next space of shelf
 		printShelf("PRODUCER 1");
 		// End Critical Section
 		V(full);
@@ -108,8 +108,8 @@ void producer2() {
 	while (1) {
 		P(empty);
 		// Critical Section
-		shelf[in] = 1;	
-		in = (in + 1) % SHELF_SIZE;
+		shelf[in] = 1;	// Produce Can
+		in = (in + 1) % SHELF_SIZE;	// Move to next space of shelf
 		printShelf("PRODUCER 2");
 		// End Critical Section
 		V(full);
@@ -125,8 +125,8 @@ void consumer1() {
 	while (1) {
 		P(full);
 		// Critical Section
-		shelf[out] = 0;
-		out = (out + 1) % SHELF_SIZE;
+		shelf[out] = 0;	// Consume Can
+		out = (out + 1) % SHELF_SIZE;	// Move to next space of shelf
 		printShelf("CONSUMER 1");
 		// End Critical Section
 		V(empty);
@@ -142,8 +142,8 @@ void consumer2() {
 	while (1) {
 		P(full);
 		// Critical Section
-		shelf[out] = 0;
-		out = (out + 1) % SHELF_SIZE;
+		shelf[out] = 0;	// Consume Can
+		out = (out + 1) % SHELF_SIZE;	// Move to next space of shelf
 		printShelf("CONSUMER 2");
 		// End Critical Section
 		V(empty);
@@ -168,6 +168,7 @@ void printShelf(char *functionName) {
 void initShelf() {
 	int i;
 
+	// Initialize the shelf to not have any cans
 	for (i = 0; i < SHELF_SIZE; i++) {
 		shelf[i] = 0;
 	}
@@ -198,23 +199,30 @@ int main() {
 */
 
 int main() {
+	// Allocate memory for the two Semaphores
 	empty = (struct semaphore*) malloc(sizeof(struct semaphore));
 	full = (struct semaphore*) malloc(sizeof(struct semaphore));
 
+	// Allocate memory for the Run Queue to hold the threaded processes
 	runQ = (struct queue*) malloc(sizeof(struct queue));
 
+	// Create the Queue
 	initQueue(runQ);
 
+	// Initialize the 2 Semaphores. Make empty = N and full = 0
 	initSem(empty, SHELF_SIZE);
 	initSem(full, 0);
 
+	// Prepare the shelf
 	initShelf();
 
+	// Add processes to threads
 	startThread(consumer1);
 	startThread(consumer2);
 	startThread(producer1);
 	startThread(producer2);
 
+	// Begin execution of threads
 	run();
 
 	return 0;
