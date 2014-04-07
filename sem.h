@@ -18,8 +18,8 @@
 // Data Structure Declaration //
 //----------------------------//
 typedef struct semaphore {
-	int value;
-	struct queue *sleepQ;
+	int value;	// Holds the Semaphore value that is incremented & decremented
+	struct queue *sleepQ;	// Stores the Queue to hold the blocked processes
 } semaphore;
 
 //----------------------------//
@@ -33,9 +33,13 @@ void V(semaphore*);
 // initSem Method //
 //----------------//
 void initSem(semaphore *sem, int value) {
+	// Allocate memory for the Sleep Queue
 	sem->sleepQ = (struct queue*) malloc(sizeof(struct queue));
+	
+	// Initialize the Head of the Sleep Queue
 	initQueue(sem->sleepQ);
 
+	// Initialize the value of the Semaphore
 	sem->value = value;
 
 	return;
@@ -45,13 +49,21 @@ void initSem(semaphore *sem, int value) {
 // P Method //
 //----------//
 void P(semaphore *sem) {
+	// Declare a temporary TCB to hold the popped process
 	struct TCB_t *t; 
 
+	// Decrement the Semaphore value
 	sem->value--;
 
+	// Check if the Semaphore value is zero or negative
 	if (sem->value < 0) {
+		// Take the current process from the Run Queue
 		t = delQueue(runQ);
+		
+		// Block the process
 		addQueue(sem->sleepQ, t);
+		
+		// Swap to the next process in the Run Queue
 		swapcontext(&(t->context), &(runQ->header->context));
 	}
 
@@ -62,15 +74,22 @@ void P(semaphore *sem) {
 // V Method //
 //----------//
 void V(semaphore *sem) {
+	// Declare a temporary TCB to hold the popped process
 	struct TCB_t *t; 
 
+	// Increment the Semaphore Value
 	sem->value++;
 
+	// Check if the Semaphore value is positive
 	if (sem->value <= 0) {
+		// Take a process from the Semaphore's Sleep Queue
 		t = delQueue(sem->sleepQ);
+		
+		// Put the process in the Run Queue
 		addQueue(runQ, t);
 	}
 
+	// Call the next process to eliminate bounded waiting
 	yield();
 
 	return;
