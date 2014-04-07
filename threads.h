@@ -39,15 +39,8 @@ void startThread(void (*function)(void)) {
 // run Method //
 //------------//
 void run() {
-	// Declare the context of the threaded TCBs
-	// ucontext_t from, to;
-	
 	// Declare the context of the first TCB
 	ucontext_t parent;
-	
-	// Assign pointers
-	// from = parent;
-	// to = (runQ->header->context);
 	
 	// Grab the original conext
 	getcontext(&parent);
